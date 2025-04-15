@@ -7,6 +7,7 @@ enum custom_keycodes {
     OBS_UNPAUSE,
     OBS_SCENE,
     BRUSH_SWITCH,
+    OBS_ZOOM_RESET,
 };
 
 bool scene_toggle = false; // 전역 변수 위치 수정
@@ -15,7 +16,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT(
     OBS_START,   OBS_STOP,   OBS_PAUSE,
     OBS_UNPAUSE, OBS_SCENE,  BRUSH_SWITCH,
-    KC_TAB,      XXXXXXX,    QK_BOOT
+    KC_TAB,      OBS_ZOOM_RESET, QK_BOOT
   )
 };
 
@@ -104,6 +105,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 tap_code(KC_TAB);
                 wait_ms(100);
                 unregister_code(KC_CAPS);
+                return false;
+                
+            case OBS_ZOOM_RESET:
+                // Option+Command+8 (확대 취소)
+                register_code(KC_LALT);
+                register_code(KC_LGUI);
+                wait_ms(100);
+                register_code(KC_8);
+                wait_ms(100);
+                unregister_code(KC_8);
+                unregister_code(KC_LGUI);
+                unregister_code(KC_LALT);
                 return false;
         }
     }
